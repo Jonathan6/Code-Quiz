@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    margin: 5%;
+    height: 1000px;
+    display: flex;
+    flex-flow: column;
+    position: relative;
+}
+
+main div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+}
