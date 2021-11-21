@@ -36,6 +36,7 @@ var answerBox = document.getElementById("answerBox");
 var welcomeScreen = document.getElementById("welcomeScreen");
 var end = document.getElementById("endScreen");
 
+var questionIndex = 0;
 var secondsLeft = 30;
 var timerInterval;
 
@@ -53,13 +54,17 @@ start.addEventListener("click", function() {
     }, 1000);
     // TODO: The front main page disappears 
     // TODO: The question and input div boxes appear 
-    testing();
+    startPoint();
 });
 
 answerBox.addEventListener("click", function(e) {
     console.log(e.currentTarget.dataset.correct);
+    //  TODO: deduct time if wrong, add points if right
     // if (e.currentTarget.dataset.correct) {
         //  They got it correct
+        //  Render the next question
+        //  I have an idea but it might get messy
+        testing();
     // } else {
         // They did not get it correct
         // Deduct time
@@ -67,11 +72,13 @@ answerBox.addEventListener("click", function(e) {
     // }
 });
 
-function testing() {
-    //  Adds the current question with answers to the page
-    // for (var i = 0; i < questionSet.length; i++) {
-        render(2);
-    // }
+function startPoint() {
+    //  Renders the first question onto the page
+    if (questionSet[questionIndex] != undefined) {
+        render(questionIndex);
+    } else {
+        // end();
+    }
 }
 
 
@@ -100,6 +107,7 @@ function render(index) {
 function end() {
     clock.textContent = "PUT DOWN YOUR PENCILS";
     secondsLeft = 30;
+    questionIndex = 0;
     //  TODO: high score page appears
     //  TODO: button box disappears
     //  TODO: asks user for name
