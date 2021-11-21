@@ -1,10 +1,10 @@
 // Acceptance Criteria
 // GIVEN I am taking a code quiz
-// WHEN I click the start button THEN a timer starts and I am presented with a question
-// WHEN I answer a question THEN I am presented with another question
-// WHEN I answer a question incorrectly THEN time is subtracted from the clock
-// WHEN all questions are answered or the timer reaches 0 THEN the game is over
-// WHEN the game is over THEN I can save my initials and my score
+// TODO: WHEN I click the start button THEN a timer starts and I am presented with a question
+// TODO: WHEN I answer a question THEN I am presented with another question
+// TODO: WHEN I answer a question incorrectly THEN time is subtracted from the clock
+// TODO: WHEN all questions are answered or the timer reaches 0 THEN the game is over
+// TODO: WHEN the game is over THEN I can save my initials and my score
 var questionSet = [
     {
         question: "What tag do we use to attach a Javascript file to the HTML?",
@@ -27,7 +27,7 @@ var buttons = [ document.getElementById("answer1"),
                 document.getElementById("answer2"),
                 document.getElementById("answer3"),
                 document.getElementById("answer4")
-            ];
+];
 
 var clock = document.getElementById("timer");
 var start = document.getElementById("start");
@@ -35,14 +35,14 @@ var question = document.getElementById("question");
 var answerBox = document.getElementById("answerBox");
 var welcomeScreen = document.getElementById("welcomeScreen");
 var end = document.getElementById("endScreen");
+var submit = document.getElementById("submit");
 
 var questionIndex = 0;
 var secondsLeft = 30;
 var timerInterval;
 
-
-
- 
+//  Event:      Click start button
+//  Function:   Hides start page, question and answer box appear
 start.addEventListener("click", function() {
     timerInterval = setInterval(function() {
         // secondsLeft--;
@@ -57,6 +57,8 @@ start.addEventListener("click", function() {
     startPoint();
 });
 
+//  Event:      Click an answer box
+//  Function:   Correct box progresses to next question, incorrect deducts time and turns box red
 answerBox.addEventListener("click", function(e) {
     //  TODO: deduct time if wrong, add points if right
     if (e.target.dataset.correct === "true") {
@@ -78,6 +80,12 @@ answerBox.addEventListener("click", function(e) {
     }
 });
 
+//  Event:      Click end screen button
+//  Function:   Submit takes user input and adds score to local storage, Try again resets the page for another quiz
+submit.addEventListener("click", function(e) {
+    
+});
+
 function startPoint() {
     //  Renders the first question onto the page
     if (questionSet[questionIndex] != undefined) {
@@ -86,7 +94,6 @@ function startPoint() {
         endPoint();
     }
 }
-
 
 function render(questionIndex) {
     //  Sets the question
@@ -109,15 +116,16 @@ function render(questionIndex) {
     }
 }
 
-
 function endPoint() {
     clock.textContent = "PUT DOWN YOUR PENCILS";
     secondsLeft = 30;
     questionIndex = 0;
+    //  TODO: add local storage highscore
+    //  TODO: load local storage previous highscores
     //  TODO: high score page appears
     //  TODO: button box disappears
     //  TODO: asks user for name
     //  TODO: record their score
     //  TODO: play again button
     //  TODO: breakdown of their score
-  }
+}
