@@ -49,7 +49,7 @@ start.addEventListener("click", function() {
         clock.textContent = (secondsLeft + " seconds left");
         if(secondsLeft <= 0) {
             clearInterval(timerInterval);
-            end();
+            endPoint();
         }
     }, 1000);
     // TODO: The front main page disappears 
@@ -58,18 +58,27 @@ start.addEventListener("click", function() {
 });
 
 answerBox.addEventListener("click", function(e) {
-    console.log(e.currentTarget.dataset.correct);
     //  TODO: deduct time if wrong, add points if right
-    // if (e.currentTarget.dataset.correct) {
+    if (e.target.dataset.correct === "true") {
         //  They got it correct
         //  Render the next question
         //  I have an idea but it might get messy
-        testing();
-    // } else {
+
+
+        // console.log(e.target);
+        // startPoint();
+    } else {
         // They did not get it correct
         // Deduct time
         // Add red background to the div with wrong answer
-    // }
+
+        console.log(e.target);
+        secondsLeft = secondsLeft - 3;
+        e.target.style.backgroundColor = "red";
+        e.target.dataset.state = "shown";
+        currentText = e.target.textContent;
+        e.target.textContent = currentText + " is incorrect";
+    }
 });
 
 function startPoint() {
@@ -104,7 +113,7 @@ function render(index) {
 }
 
 
-function end() {
+function endPoint() {
     clock.textContent = "PUT DOWN YOUR PENCILS";
     secondsLeft = 30;
     questionIndex = 0;
