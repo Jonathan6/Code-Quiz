@@ -8,17 +8,17 @@
 var questionSet = [
     {
         question: "What tag do we use to attach a Javascript file to the HTML?",
-        correctAnswer: 1,
+        correctAnswerIndex: 0,
         answers: ["script", "link", "a", "all of the above", "none of the above"]
     },
     {
         question: "Which is not a primitive data type?",
-        correctAnswer: 4,
+        correctAnswerIndex: 3,
         answers: ["boolean", "number", "String", "bologne", "all of these are primitive data types"]
     },
     {
         question: "What do you put directly after a the function name to hold stuff?",
-        correctAnswer: 2,
+        correctAnswerIndex: 1,
         answers: ["brackets[]", "parenthesis()", "curly braces{}", "all of the above","none of the above"]
     }
 ];
@@ -44,7 +44,7 @@ var timerInterval;
  
 start.addEventListener("click", function() {
     timerInterval = setInterval(function() {
-        secondsLeft--;
+        // secondsLeft--;
         clock.textContent = (secondsLeft + " seconds left");
         if(secondsLeft <= 0) {
             clearInterval(timerInterval);
@@ -69,27 +69,30 @@ answerBox.addEventListener("click", function(e) {
 
 function testing() {
     //  Adds the current question with answers to the page
-    for (var i = 0; i < questionSet.length; i++) {
-        render(i);
-    }
+    // for (var i = 0; i < questionSet.length; i++) {
+        render(2);
+    // }
 }
 
 
 function render(index) {
     //  Sets the question
     question.textContent = questionSet[index].question;
+    var answerIndex = questionSet[index].correctAnswerIndex;
 
     //  Sets the answer options, background color, if selected
     for (let i = 0; i < 4; i++) {
-        buttons[i] = questionSet[i].answers[i];
+        buttons[i].textContent = questionSet[index].answers[i];
+        // buttons[i].setAttribute("backgroundColor", "beige");
         buttons[i].style.backgroundColor = "beige";
         buttons[i].dataset.state = "hidden";
         //Sets data value of the answer
-        if (i === questionSet[index].correctAnswer) {
+        if (i === answerIndex) {
             buttons[i].dataset.correct = true;
         } else {
             buttons[i].dataset.correct = false;
         }
+        console.log(buttons[i]);
     }
 }
 
@@ -97,10 +100,10 @@ function render(index) {
 function end() {
     clock.textContent = "PUT DOWN YOUR PENCILS";
     secondsLeft = 30;
-    //  high score page appears
-    //  button box disappears
-    //  asks user for name
-    //  record their score
-    //  play again button
-    //  breakdown of their score
+    //  TODO: high score page appears
+    //  TODO: button box disappears
+    //  TODO: asks user for name
+    //  TODO: record their score
+    //  TODO: play again button
+    //  TODO: breakdown of their score
   }
