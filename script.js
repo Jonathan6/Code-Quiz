@@ -8,37 +8,40 @@
 var questionSet = [
     {
         question: "What tag do we use to attach a Javascript file to the HTML?",
-        correctAnswer: "script",
+        correctAnswer: 1,
         answers: ["script", "link", "a", "all of the above", "none of the above"]
     },
     {
         question: "Which is not a primitive data type?",
-        correctAnswer: "bologne",
+        correctAnswer: 4,
         answers: ["boolean", "number", "String", "bologne", "all of these are primitive data types"]
     },
     {
         question: "What do you put directly after a the function name to hold stuff?",
-        correctAnswer: "parenthesis",
+        correctAnswer: 2,
         answers: ["brackets[]", "parenthesis()", "curly braces{}", "all of the above","none of the above"]
     }
 ];
 
+var buttons = [ document.getElementById("answer1"),
+                document.getElementById("answer2"),
+                document.getElementById("answer3"),
+                document.getElementById("answer4")
+            ];
 
 var clock = document.getElementById("timer");
 var start = document.getElementById("start");
 var question = document.getElementById("question");
-var ansOne = document.getElementById("answer1");
-var ansTwo = document.getElementById("answer2");
-var ansThree = document.getElementById("answer3");
-var ansFour = document.getElementById("answer4");
+var answerBox = document.getElementById("answerBox");
 var welcomeScreen = document.getElementById("welcomeScreen");
-var end = docuemnt.getElementById("endScreen");
+var end = document.getElementById("endScreen");
 
 var secondsLeft = 30;
 var timerInterval;
 
 
-    // Click the start button 
+
+ 
 start.addEventListener("click", function() {
     timerInterval = setInterval(function() {
         secondsLeft--;
@@ -51,37 +54,53 @@ start.addEventListener("click", function() {
     // TODO: The front main page disappears 
     // TODO: The question and input div boxes appear 
     testing();
-
-    
 });
 
-function setQuestion() {
-    // TODO: for loop for x many questions
-    for (var i = 0; i < questionSet.length; i++) {
-    //     Pull in question data and add it to question box
-        question.textContent = questionSet[i].question;
-    //     Pull in multiple choice options and add it
-        
-    //     User selects a choice
-    //     if wrong
-    //         deduct time for unique wrong answer
-    //         have some visual that it was wrong
-    //     else
-    //         nothing I guess
+answerBox.addEventListener("click", function(e) {
+    console.log(e.currentTarget.dataset.correct);
+    // if (e.currentTarget.dataset.correct) {
+        //  They got it correct
+    // } else {
+        // They did not get it correct
+        // Deduct time
+        // Add red background to the div with wrong answer
+    // }
+});
 
+function testing() {
+    //  Adds the current question with answers to the page
+    for (var i = 0; i < questionSet.length; i++) {
+        render(i);
+    }
+}
+
+
+function render(index) {
+    //  Sets the question
+    question.textContent = questionSet[index].question;
+
+    //  Sets the answer options, background color, if selected
+    for (let i = 0; i < 4; i++) {
+        buttons[i] = questionSet[i].answers[i];
+        buttons[i].style.backgroundColor = "beige";
+        buttons[i].dataset.state = "hidden";
+        //Sets data value of the answer
+        if (i === questionSet[index].correctAnswer) {
+            buttons[i].dataset.correct = true;
+        } else {
+            buttons[i].dataset.correct = false;
+        }
     }
 }
 
 
 function end() {
-  clock.textContent = "PUT DOWN YOUR PENCILS";
-  
-    // high score page appears
-    // asks user for name
-    // record their score with play again button
-}
-
-
-
-    
-
+    clock.textContent = "PUT DOWN YOUR PENCILS";
+    secondsLeft = 30;
+    //  high score page appears
+    //  button box disappears
+    //  asks user for name
+    //  record their score
+    //  play again button
+    //  breakdown of their score
+  }

@@ -15,14 +15,12 @@
             You will be tested 10 questions about JavaScript with 30 seconds on the clock. Every wrong answer will deduct 3 seconds form your time!
             <button id="start">start</button>
         </div>
-        <div class="question">
-            This is where the question will go
-        </div>
-        <div class="buttons">
-            <a id="answer1" data-clicked=false><button id="1">1</button></a>
-            <a id="answer2" data-clicked=false><button id="2">2</button></a>
-            <a id="answer3" data-clicked=false><button id="3">3</button></a>
-            <a id="answer4" data-clicked=false><button id="4">4</button></a>
+        <div id="question"> </div>
+        <div id="answerBox">
+            <div id="answer1" data-correct=false data-state="hidden">1</div>
+            <div id="answer2" data-correct=false data-state="hidden">2</div>
+            <div id="answer3" data-correct=false data-state="hidden">3</div>
+            <div id="answer4" data-correct=false data-state="hidden">4</div>
         </div>
         <div id="endScreen">
             Wowow you got a pretty big score! Input your name to show how awesome you did!

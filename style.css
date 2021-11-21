@@ -17,7 +17,14 @@ main div {
     justify-content: center;
 }
 
-.buttons {
+#answerBox {
     display: flex;
     flex-direction: column;
+}
+
+#answerBox div {
+    background-color: beige;
+    border: black solid 2px;
+    padding: 10px;
+    margin: 10px;
 }
