@@ -17,7 +17,7 @@ var questionSet = [
         answers: ["boolean", "number", "String", "bologne", "all of these are primitive data types"]
     },
     {
-        question: "What do you put directly after a the function name to hold stuff?",
+        question: "What do you put directly after the function name to hold stuff?",
         correctAnswerIndex: 1,
         answers: ["brackets[]", "parenthesis()", "curly braces{}", "all of the above","none of the above"]
     }
@@ -63,16 +63,13 @@ answerBox.addEventListener("click", function(e) {
         //  They got it correct
         //  Render the next question
         //  I have an idea but it might get messy
-
-
-        // console.log(e.target);
-        // startPoint();
-    } else {
+        questionIndex++;
+        startPoint();
+    } else if (e.target.dataset.state === "hidden") {
         // They did not get it correct
         // Deduct time
         // Add red background to the div with wrong answer
 
-        console.log(e.target);
         secondsLeft = secondsLeft - 3;
         e.target.style.backgroundColor = "red";
         e.target.dataset.state = "shown";
@@ -86,19 +83,19 @@ function startPoint() {
     if (questionSet[questionIndex] != undefined) {
         render(questionIndex);
     } else {
-        // end();
+        endPoint();
     }
 }
 
 
-function render(index) {
+function render(questionIndex) {
     //  Sets the question
-    question.textContent = questionSet[index].question;
-    var answerIndex = questionSet[index].correctAnswerIndex;
+    question.textContent = questionSet[questionIndex].question;
+    var answerIndex = questionSet[questionIndex].correctAnswerIndex;
 
     //  Sets the answer options, background color, if selected
     for (let i = 0; i < 4; i++) {
-        buttons[i].textContent = questionSet[index].answers[i];
+        buttons[i].textContent = questionSet[questionIndex].answers[i];
         // buttons[i].setAttribute("backgroundColor", "beige");
         buttons[i].style.backgroundColor = "beige";
         buttons[i].dataset.state = "hidden";
