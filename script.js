@@ -23,6 +23,9 @@ var questionSet = [
     }
 ];
 
+
+var highscores = [];
+
 var buttons = [ document.getElementById("answer1"),
                 document.getElementById("answer2"),
                 document.getElementById("answer3"),
@@ -35,7 +38,11 @@ var question = document.getElementById("question");
 var answerBox = document.getElementById("answerBox");
 var welcomeScreen = document.getElementById("welcomeScreen");
 var end = document.getElementById("endScreen");
+
+var leaderboard = document.getElementById("leaderboard");
+var userInput = document.getElementById("userInput");
 var submit = document.getElementById("submit");
+var again = document.getElementById("playAgain");
 
 var questionIndex = 0;
 var secondsLeft = 30;
@@ -60,7 +67,7 @@ start.addEventListener("click", function() {
 //  Event:      Click an answer box
 //  Function:   Correct box progresses to next question, incorrect deducts time and turns box red
 answerBox.addEventListener("click", function(e) {
-    //  TODO: deduct time if wrong, add points if right
+    //  TODO: add points if right
     if (e.target.dataset.correct === "true") {
         //  They got it correct
         //  Render the next question
@@ -81,21 +88,51 @@ answerBox.addEventListener("click", function(e) {
 });
 
 //  Event:      Click end screen button
-//  Function:   Submit takes user input and adds score to local storage, Try again resets the page for another quiz
+//  Function:   Submit takes user input and adds score to local storage
 submit.addEventListener("click", function(e) {
+    //  record their score
+    //  add local storage highscore
+    //  asks user for name
+
+    // console.log(userInput.textContent.trim());
+    if (userInput.value.trim() != "") {
+        highscores.push(secondsLeft);
+        highscores.push(userInput.value);
+        save();
+    }
+
+
     
+    //  TODO: sort the highscores
+    // if (highscores.length === 0) {
+    //     highscores.push(secondsLeft);
+    // } else {
+    //     for (var i = 0; i < highscores.length; i++) {
+    //         if (highscores[i] < secondsLeft) {
+                
+    //         }
+    //     }
+    // }
+});
+
+//  Event:      Click end screen button
+//  Function:   Try again resets the page for another quiz
+again.addEventListener("click", function(e) {
+    console.log(e.target);
+
+    //  TODO: play again button
 });
 
 function startPoint() {
     //  Renders the first question onto the page
     if (questionSet[questionIndex] != undefined) {
-        render(questionIndex);
+        renderQuestion(questionIndex);
     } else {
         endPoint();
     }
 }
 
-function render(questionIndex) {
+function renderQuestion(questionIndex) {
     //  Sets the question
     question.textContent = questionSet[questionIndex].question;
     var answerIndex = questionSet[questionIndex].correctAnswerIndex;
@@ -116,16 +153,30 @@ function render(questionIndex) {
     }
 }
 
+
+
 function endPoint() {
     clock.textContent = "PUT DOWN YOUR PENCILS";
     secondsLeft = 30;
     questionIndex = 0;
-    //  TODO: add local storage highscore
+
+    load();
     //  TODO: load local storage previous highscores
     //  TODO: high score page appears
     //  TODO: button box disappears
-    //  TODO: asks user for name
-    //  TODO: record their score
-    //  TODO: play again button
     //  TODO: breakdown of their score
+}
+
+function save() {
+    localStorage.clear();
+    localStorage.setItem("save", JSON.stringify(highscores));
+    // for (var i = 0; i < highscores.length; i = i + 2) {
+    //     localStorage.setItem(highscores[i], highscores[i + 1]);
+    // }
+}
+
+function load() {
+    if (localStorage.getItem("save") != null) {
+        highscores = JSON.parse(localStorage.getItem("save"));
+    }
 }
