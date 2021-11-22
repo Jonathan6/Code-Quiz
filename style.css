@@ -28,3 +28,19 @@ main div {
     padding: 10px;
     margin: 10px;
 }
+
+#leaderboard {
+    display: flex;
+}
+
+#leaderboard ol {
+    width: 50%;
+}
+
+#testScreen {
+    display: none;
+}
+
+#endScreen {
+    display: none;
+}

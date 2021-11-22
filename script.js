@@ -36,8 +36,10 @@ var clock = document.getElementById("timer");
 var start = document.getElementById("start");
 var question = document.getElementById("question");
 var answerBox = document.getElementById("answerBox");
+
+var testScreen = document.getElementById("testScreen");
 var welcomeScreen = document.getElementById("welcomeScreen");
-var end = document.getElementById("endScreen");
+var endScreen = document.getElementById("endScreen");
 
 var leaderboard = document.getElementById("leaderboard");
 var userInput = document.getElementById("userInput");
@@ -48,11 +50,13 @@ var questionIndex = 0;
 var secondsLeft = 30;
 var timerInterval;
 
+load();
+
 //  Event:      Click start button
 //  Function:   Hides start page, question and answer box appear
 start.addEventListener("click", function() {
     timerInterval = setInterval(function() {
-        // secondsLeft--;
+        secondsLeft--;
         clock.textContent = (secondsLeft + " seconds left");
         if(secondsLeft <= 0) {
             clearInterval(timerInterval);
@@ -87,7 +91,7 @@ answerBox.addEventListener("click", function(e) {
     }
 });
 
-//  Event:      Click end screen button
+//  Event:      Click submit score button
 //  Function:   Submit takes user input and adds score to local storage
 submit.addEventListener("click", function(e) {
     //  record their score
@@ -96,9 +100,10 @@ submit.addEventListener("click", function(e) {
 
     // console.log(userInput.textContent.trim());
     if (userInput.value.trim() != "") {
-        highscores.push(secondsLeft);
         highscores.push(userInput.value);
+        highscores.push(secondsLeft);
         save();
+        renderLeaderboard();
     }
 
 
@@ -115,15 +120,19 @@ submit.addEventListener("click", function(e) {
     // }
 });
 
-//  Event:      Click end screen button
+//  Event:      Click try again button
 //  Function:   Try again resets the page for another quiz
 again.addEventListener("click", function(e) {
     console.log(e.target);
 
     //  TODO: play again button
+    endScreen.style.display = "none";
+    testScreen.style.display = "initial";
 });
 
 function startPoint() {
+    welcomeScreen.style.display = "none";
+    testScreen.style.display = "initial";
     //  Renders the first question onto the page
     if (questionSet[questionIndex] != undefined) {
         renderQuestion(questionIndex);
@@ -149,22 +158,42 @@ function renderQuestion(questionIndex) {
         } else {
             buttons[i].dataset.correct = false;
         }
-        console.log(buttons[i]);
     }
 }
 
+function renderLeaderboard() {
+    leaderboard.innerHTML = "";
+    var leaderListLeft = document.createElement("ol");
+    var leaderListRight = document.createElement("ol");
 
+
+    for (var i = 0; i < highscores.length; i = i + 2) {
+        console.log(highscores.length);
+
+        var itemName = document.createElement("li");
+        itemName.textContent = highscores[i];
+
+        var itemScore = document.createElement("li");
+        itemScore.textContent = highscores[i + 1];
+
+        leaderListLeft.appendChild(itemName);
+        leaderListRight.appendChild(itemScore);
+    }
+
+    leaderboard.appendChild(leaderListLeft);
+    leaderboard.appendChild(leaderListRight);
+}
 
 function endPoint() {
     clock.textContent = "PUT DOWN YOUR PENCILS";
-    secondsLeft = 30;
-    questionIndex = 0;
-
+    reset();
     load();
     //  TODO: load local storage previous highscores
     //  TODO: high score page appears
     //  TODO: button box disappears
     //  TODO: breakdown of their score
+    testScreen.style.display = "none";
+    endScreen.style.display = "initial";
 }
 
 function save() {
@@ -179,4 +208,25 @@ function load() {
     if (localStorage.getItem("save") != null) {
         highscores = JSON.parse(localStorage.getItem("save"));
     }
+
+    renderLeaderboard();
+}
+
+function reset() {
+    secondsLeft = 30;
+    questionIndex = 0;
+    
+    for (let i = 0; i < 4; i++) {
+        buttons[i].textContent = questionSet[questionIndex].answers[i];
+        // buttons[i].setAttribute("backgroundColor", "beige");
+        buttons[i].style.backgroundColor = "beige";
+        buttons[i].dataset.state = "hidden";
+        //Sets data value of the answer
+        if (i === answerIndex) {
+            buttons[i].dataset.correct = true;
+        } else {
+            buttons[i].dataset.correct = false;
+        }
+    }
+
 }
