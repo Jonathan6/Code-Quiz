@@ -19,7 +19,42 @@ var questionSet = [
     {
         question: "What do you put directly after the function name to hold stuff?",
         correctAnswerIndex: 1,
-        answers: ["brackets[]", "parenthesis()", "curly braces{}", "all of the above","none of the above"]
+        answers: ["brackets[]", "parenthesis()", "curly braces{}", "all of the above", "none of the above"]
+    },
+    {
+        question: "What are variables used for in JavaScript?",
+        correctAnswerIndex: 4,
+        answers: ["Creating random variations everytime you run the script", "Connecting the script file with the HTML", "Causing PTSD flashbacks on when the teacher called on you", "Storing numbers, booleans, and Strings"]
+    },
+    {
+        question: "How does the date object in JavaScript store the date?",
+        correctAnswerIndex: ,
+        answers: ["Total milliseconds since Jan 1st, 1970", "Total minutes since Jan 2nd, 2000", "Calls a function from the International Date Time Association API", "Asks ur mum"]
+    },
+    {
+        question: "Which of these could be a representation of a number?",
+        correctAnswerIndex: 1,
+        answers: ["NAN", "NULL", "Fifty", "bologna", "fifty"]
+    },
+    {
+        question: "Which of these is not in JavaScript?",
+        correctAnswerIndex: 2,
+        answers: ["Block Scope", "Tele Scope", "Global Scope", "Function Scope"]
+    },
+    {
+        question: "0.1 + 0.2 =",
+        correctAnswerIndex: 4,
+        answers: ["0.3", "0", "0.0", "0.30000000000000004"]
+    },
+    {
+        question: "",
+        correctAnswerIndex: ,
+        answers: ["", "", "", ""]
+    },
+    {
+        question: "What do you call a sausage consisting of finely ground pork sausage with small parts of pork fat, originally from a small city in Italy?",
+        correctAnswerIndex: 2,
+        answers: ["String", "bologna", "array", "the window", "null"]
     }
 ];
 
@@ -32,25 +67,24 @@ var buttons = [ document.getElementById("answer1"),
                 document.getElementById("answer4")
 ];
 
-var clock = document.getElementById("timer");
-var start = document.getElementById("start");
+var clock = document.getElementById("clock");
 var question = document.getElementById("question");
-var answerBox = document.getElementById("answerBox");
+var leaderboard = document.getElementById("leaderboard");
+
+var start = document.getElementById("start");
+var answerBox = document.getElementById("answerBox"); 
+var userInput = document.getElementById("userInput");
+var submit = document.getElementById("submit");
+var again = document.getElementById("playAgain");
 
 var testScreen = document.getElementById("testScreen");
 var welcomeScreen = document.getElementById("welcomeScreen");
 var endScreen = document.getElementById("endScreen");
 
-var leaderboard = document.getElementById("leaderboard");
-var userInput = document.getElementById("userInput");
-var submit = document.getElementById("submit");
-var again = document.getElementById("playAgain");
-
 var questionIndex = 0;
+var penalty = 3; // How many seconds will be deduted when geting a wrong answer
 var secondsLeft = 30;
 var timerInterval;
-
-load();
 
 //  Event:      Click start button
 //  Function:   Hides start page, question and answer box appear
@@ -63,8 +97,9 @@ start.addEventListener("click", function() {
             endPoint();
         }
     }, 1000);
-    // TODO: The front main page disappears 
-    // TODO: The question and input div boxes appear 
+    welcomeScreen.style.display = "none";
+    testScreen.style.display = "initial";
+    loadLeaderboardScores();
     startPoint();
 });
 
@@ -75,7 +110,6 @@ answerBox.addEventListener("click", function(e) {
     if (e.target.dataset.correct === "true") {
         //  They got it correct
         //  Render the next question
-        //  I have an idea but it might get messy
         questionIndex++;
         startPoint();
     } else if (e.target.dataset.state === "hidden") {
@@ -83,7 +117,7 @@ answerBox.addEventListener("click", function(e) {
         // Deduct time
         // Add red background to the div with wrong answer
 
-        secondsLeft = secondsLeft - 3;
+        secondsLeft = secondsLeft - penalty;
         e.target.style.backgroundColor = "red";
         e.target.dataset.state = "shown";
         currentText = e.target.textContent;
@@ -105,9 +139,6 @@ submit.addEventListener("click", function(e) {
         save();
         renderLeaderboard();
     }
-
-
-    
     //  TODO: sort the highscores
     // if (highscores.length === 0) {
     //     highscores.push(secondsLeft);
@@ -131,9 +162,8 @@ again.addEventListener("click", function(e) {
 });
 
 function startPoint() {
-    welcomeScreen.style.display = "none";
-    testScreen.style.display = "initial";
     //  Renders the first question onto the page
+    console.log(questionSet[questionIndex]);
     if (questionSet[questionIndex] != undefined) {
         renderQuestion(questionIndex);
     } else {
@@ -147,9 +177,8 @@ function renderQuestion(questionIndex) {
     var answerIndex = questionSet[questionIndex].correctAnswerIndex;
 
     //  Sets the answer options, background color, if selected
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < buttons.length; i++) {
         buttons[i].textContent = questionSet[questionIndex].answers[i];
-        // buttons[i].setAttribute("backgroundColor", "beige");
         buttons[i].style.backgroundColor = "beige";
         buttons[i].dataset.state = "hidden";
         //Sets data value of the answer
@@ -166,10 +195,7 @@ function renderLeaderboard() {
     var leaderListLeft = document.createElement("ol");
     var leaderListRight = document.createElement("ol");
 
-
     for (var i = 0; i < highscores.length; i = i + 2) {
-        console.log(highscores.length);
-
         var itemName = document.createElement("li");
         itemName.textContent = highscores[i];
 
@@ -185,12 +211,9 @@ function renderLeaderboard() {
 }
 
 function endPoint() {
-    clock.textContent = "PUT DOWN YOUR PENCILS";
-    reset();
-    load();
-    //  TODO: load local storage previous highscores
-    //  TODO: high score page appears
-    //  TODO: button box disappears
+    clock.textContent = "PUT DOWN YOUR MICE";
+    resetSettings();
+    loadLeaderboardScores();
     //  TODO: breakdown of their score
     testScreen.style.display = "none";
     endScreen.style.display = "initial";
@@ -204,7 +227,7 @@ function save() {
     // }
 }
 
-function load() {
+function loadLeaderboardScores() {
     if (localStorage.getItem("save") != null) {
         highscores = JSON.parse(localStorage.getItem("save"));
     }
@@ -212,21 +235,15 @@ function load() {
     renderLeaderboard();
 }
 
-function reset() {
+function resetSettings() {
     secondsLeft = 30;
     questionIndex = 0;
     
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < buttons.length; i++) {
         buttons[i].textContent = questionSet[questionIndex].answers[i];
-        // buttons[i].setAttribute("backgroundColor", "beige");
         buttons[i].style.backgroundColor = "beige";
         buttons[i].dataset.state = "hidden";
-        //Sets data value of the answer
-        if (i === answerIndex) {
-            buttons[i].dataset.correct = true;
-        } else {
-            buttons[i].dataset.correct = false;
-        }
+        buttons[i].dataset.correct = false;
     }
 
 }
