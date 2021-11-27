@@ -1,13 +1,3 @@
-// Acceptance Criteria
-// GIVEN I am taking a code quiz
-// TODO: WHEN I click the start button THEN a timer starts and I am presented with a question
-// TODO: WHEN I answer a question THEN I am presented with another question
-// TODO: WHEN I answer a question incorrectly THEN time is subtracted from the clock
-// TODO: WHEN all questions are answered or the timer reaches 0 THEN the game is over
-// TODO: WHEN the game is over THEN I can save my initials and my score
-
-// hidden lines 165, 109, 227
-
 //  Question bank
 var questionSet = [
     {
@@ -88,20 +78,17 @@ var welcomeScreen = document.getElementById("welcomeScreen");
 var testScreen = document.getElementById("testScreen");
 var endScreen = document.getElementById("endScreen");
 
-welcomeScreen.style.display = "block";
-testScreen.style.display = "block";
-endScreen.style.display = "block";
-
-//  Internal variables
-
-var questionIndex = 0;
-var secondsLeft = 60;
-var timerInterval;
-
 //  Settings
+var timeGiven = 60;
 var penalty = 3; // How many seconds will be deduted when geting a wrong answer
 var correctColor = "beige";
 var incorrectColor = "red";
+
+//  Internal variables
+var questionIndex = 0;
+var secondsLeft = timeGiven;
+var timerInterval;
+
 
 //  Event:      Click start button
 //  Function:   Hides start page, question and answer box appear
@@ -110,12 +97,11 @@ start.addEventListener("click", function() {
         secondsLeft--;
         clock.textContent = (secondsLeft + " seconds left");
         if(secondsLeft <= 0) {
-            clearInterval(timerInterval);
             endPoint();
         }
     }, 1000);
-    // welcomeScreen.style.display = "none";
-    // testScreen.style.display = "initial";
+    welcomeScreen.style.display = "none";
+    testScreen.style.display = "initial";
     loadLeaderboardScores();
     startPoint();
 });
@@ -145,17 +131,17 @@ submit.addEventListener("click", function(e) {
         addScore([userInput.value.trim(), secondsLeft]);
         save();
         renderLeaderboard();
+        submit.style.display = "none";
     }
 });
 
 //  Event:      Click try again button
 //  Function:   Try again resets the page for another quiz
 again.addEventListener("click", function(e) {
-    console.log(e.target);
-
-    //  TODO: play again button
-    // endScreen.style.display = "none";
-    // testScreen.style.display = "initial";
+    resetSettings();
+    submit.style.display = "initial";
+    endScreen.style.display = "none";
+    welcomeScreen.style.display = "initial";
 });
 
 function startPoint() {
@@ -187,21 +173,21 @@ function renderQuestion(questionIndex) {
     }
 }
 
-
 function endPoint() {
+    clearInterval(timerInterval);
     clock.textContent = "PUT DOWN YOUR MICE";
     score.textContent = secondsLeft + " seconds!";
-    resetSettings();
     loadLeaderboardScores();
     renderLeaderboard();
     //  TODO: breakdown of their score
-    // testScreen.style.display = "none";
-    // endScreen.style.display = "initial";
+    testScreen.style.display = "none";
+    endScreen.style.display = "initial";
 }
 
 function resetSettings() {
-    secondsLeft = 30;
+    secondsLeft = timeGiven;
     questionIndex = 0;
+    clock.textContent = "Quiz has not started yet";
     
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].textContent = questionSet[questionIndex].answers[i];
@@ -263,4 +249,3 @@ function renderLeaderboard() {
     leaderboard.appendChild(leaderListLeft);
     leaderboard.appendChild(leaderListRight);
 }
-
