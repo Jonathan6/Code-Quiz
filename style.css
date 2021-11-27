@@ -1,5 +1,12 @@
 header {
-    
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#welcomeScreen {
+    display: flex;
+    flex-direction: column;
 }
 
 body {
@@ -30,6 +37,7 @@ main div {
     line-height: 2rem;
     font-family: 'Times New Roman', Times, serif;
     font-size: 1.5rem;
+    
 }
 
 #answerBox div {

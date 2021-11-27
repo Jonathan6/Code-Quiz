@@ -95,10 +95,15 @@ testScreen.style.display = "block";
 endScreen.style.display = "block";
 
 //  Internal variables
+
 var questionIndex = 0;
-var penalty = 3; // How many seconds will be deduted when geting a wrong answer
 var secondsLeft = 30;
 var timerInterval;
+
+//  Settings
+var penalty = 3; // How many seconds will be deduted when geting a wrong answer
+var correctColor = "beige";
+var incorrectColor = "red";
 
 //  Event:      Click start button
 //  Function:   Hides start page, question and answer box appear
@@ -132,7 +137,7 @@ answerBox.addEventListener("click", function(e) {
         // Add red background to the div with wrong answer
 
         secondsLeft = secondsLeft - penalty;
-        e.target.style.backgroundColor = "red";
+        e.target.style.backgroundColor = incorrectColor;
         e.target.dataset.state = "shown";
         currentText = e.target.textContent;
         e.target.textContent = currentText + " is incorrect";
@@ -193,7 +198,7 @@ function renderQuestion(questionIndex) {
     //  Sets the answer options, background color, if selected
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].textContent = questionSet[questionIndex].answers[i];
-        buttons[i].style.backgroundColor = "beige";
+        buttons[i].style.backgroundColor = correctColor;
         buttons[i].dataset.state = "hidden";
         //Sets data value of the answer
         if (i === answerIndex) {
@@ -258,7 +263,7 @@ function resetSettings() {
     
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].textContent = questionSet[questionIndex].answers[i];
-        buttons[i].style.backgroundColor = "beige";
+        buttons[i].style.backgroundColor = correctColor;
         buttons[i].dataset.state = "hidden";
         buttons[i].dataset.correct = false;
     }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="style.css" rel="stylesheet"></a>
     <title>JavaScript Code Quiz</title>
 </head>
@@ -14,28 +15,35 @@
     </header>
     <main>
         <section id="welcomeScreen">
-            Hello welcome to the JavaScript Quiz!
-            You will be tested 10 questions on JavaScript with 30 seconds on the clock. Every wrong answer will deduct 3 seconds form your time!
-            <button id="start">start</button>
+            <h2>Hello welcome to the JavaScript Quiz!</h2>
+            <a>You will be tested 10 questions on JavaScript with 30 seconds on the clock. Every wrong answer will deduct 3 seconds form your time!</a>
+            <button type="button" class="btn btn-primary" id="start">start</button>
         </section>
         <section id="testScreen">
             <div id="question"> </div>
             <div id="answerBox">
-                <button id="answer1" data-correct=false data-state="hidden">1</button>
+                <button type="button" class="btn btn-light" id="answer1" data-correct=false data-state="hidden">1</button>
+                <button type="button" class="btn btn-light" id="answer2" data-correct=false data-state="hidden">2</button>
+                <button type="button" class="btn btn-light" id="answer3" data-correct=false data-state="hidden">3</button>
+                <button type="button" class="btn btn-light" id="answer4" data-correct=false data-state="hidden">4</button>
+                <!-- <button id="answer1" data-correct=false data-state="hidden">1</button>
                 <button id="answer2" data-correct=false data-state="hidden">2</button>
                 <button id="answer3" data-correct=false data-state="hidden">3</button>
-                <button id="answer4" data-correct=false data-state="hidden">4</button>
+                <button id="answer4" data-correct=false data-state="hidden">4</button> -->
             </div>
         </section>
         <section id="endScreen">
             Wowow you got a pretty big score! Input your name to show how awesome you did!
             <input id="userInput" type="text">
-            <button id="submit">Submit High Score</button>
-            <button id="playAgain">Try Again?</button>
+            <!-- <button id="submit">Submit High Score</button> -->
+            <button type="button" class="btn btn-primary" id="submit">Submit High Score</button>
+            <!-- <button id="playAgain">Try Again?</button> -->
+            <button type="button" class="btn btn-secondary" id="playAgain">Try Again?</button>
             <div id="score"></div>
             <div id="leaderboard"></div>
         </section>
     </main>
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
