@@ -8,8 +8,6 @@
 
 // hidden lines 165, 109, 227
 
-
-
 //  Question bank
 var questionSet = [
     {
@@ -35,7 +33,7 @@ var questionSet = [
     {
         question: "How does the date object in JavaScript store the date?",
         correctAnswerIndex: 0,
-        answers: ["Total milliseconds since Jan 1st, 1970", "Total minutes since Jan 2nd, 2000", "Calls a function from the International Date Time Association API", "Asks ur mum"]
+        answers: ["Total milliseconds since Jan 1st, 1970", "Total minutes since Jan 2nd, 2000", "Calls a function from the International Date Time Association API", "Every computer has a tiny time wizard inside meticulously counting each millisecond since the start of time"]
     },
     {
         question: "Which of these could be a representation of a number?",
@@ -189,6 +187,62 @@ function renderQuestion(questionIndex) {
     }
 }
 
+
+function endPoint() {
+    clock.textContent = "PUT DOWN YOUR MICE";
+    score.textContent = secondsLeft + " seconds!";
+    resetSettings();
+    loadLeaderboardScores();
+    renderLeaderboard();
+    //  TODO: breakdown of their score
+    // testScreen.style.display = "none";
+    // endScreen.style.display = "initial";
+}
+
+function resetSettings() {
+    secondsLeft = 30;
+    questionIndex = 0;
+    
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].textContent = questionSet[questionIndex].answers[i];
+        buttons[i].style.backgroundColor = correctColor;
+        buttons[i].dataset.state = "hidden";
+        buttons[i].dataset.correct = false;
+    }
+}
+
+function loadLeaderboardScores() {
+    if (localStorage.getItem("save") != null) {
+        highscores = JSON.parse(localStorage.getItem("save"));
+    }
+}
+
+//  Sorting the left being the highest
+//  This will not work based on how I set up the array. Will need to find a different solution
+function addScore(score) {
+    if (highscores.length <= 0) {
+        highscores.push(score);
+    } else if (score[1] >= highscores[0][1]) {
+        highscores.unshift(score);
+    } else {
+        var temp = score;
+        var temp2;
+        for (var i = 1; i < highscores.length; i++) {
+            if (temp[1] >= highscores[i][1]) {
+                temp2 = highscores[i];
+                highscores[i] = temp;
+                temp = temp2;
+            }
+        }
+        highscores.push(temp);
+    }
+}
+
+function save() {
+    localStorage.clear();
+    localStorage.setItem("save", JSON.stringify(highscores));
+}
+
 function renderLeaderboard() {
     leaderboard.innerHTML = "";
     var leaderListLeft = document.createElement("ol");
@@ -210,63 +264,3 @@ function renderLeaderboard() {
     leaderboard.appendChild(leaderListRight);
 }
 
-function endPoint() {
-    clock.textContent = "PUT DOWN YOUR MICE";
-    score.textContent = secondsLeft + " seconds!";
-    resetSettings();
-    loadLeaderboardScores();
-    //  TODO: breakdown of their score
-    // testScreen.style.display = "none";
-    // endScreen.style.display = "initial";
-}
-
-function save() {
-    localStorage.clear();
-    localStorage.setItem("save", JSON.stringify(highscores));
-}
-
-function loadLeaderboardScores() {
-    if (localStorage.getItem("save") != null) {
-        highscores = JSON.parse(localStorage.getItem("save"));
-    }
-    renderLeaderboard();
-}
-
-function resetSettings() {
-    secondsLeft = 30;
-    questionIndex = 0;
-    
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].textContent = questionSet[questionIndex].answers[i];
-        buttons[i].style.backgroundColor = correctColor;
-        buttons[i].dataset.state = "hidden";
-        buttons[i].dataset.correct = false;
-    }
-}
-
-
-//  Sorting the left being the highest
-//  This will not work based on how I set up the array. Will need to find a different solution
-    /*  
-        empty array
-        largest value in the array
-        inbetween cases
-    */
-function addScore(score) {
-    if (highscores.length <= 0) {
-        highscores.push(score);
-    } else if (score[1] >= highscores[0][1]) {
-        highscores.unshift(score);
-    } else {
-        var temp = score;
-        var temp2;
-        for (var i = 1; i < highscores.length; i++) {
-            if (temp[1] >= highscores[i][1]) {
-                temp2 = highscores[i];
-                highscores[i] = temp;
-                temp = temp2;
-            }
-        }
-        highscores.push(temp);
-    }
-}
