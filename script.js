@@ -128,14 +128,10 @@ answerBox.addEventListener("click", function(e) {
     //  TODO: add points if right
     if (e.target.dataset.correct === "true") {
         //  They got it correct
-        //  Render the next question
         questionIndex++;
         startPoint();
     } else if (e.target.dataset.state === "hidden") {
         // They did not get it correct
-        // Deduct time
-        // Add red background to the div with wrong answer
-
         secondsLeft = secondsLeft - penalty;
         e.target.style.backgroundColor = incorrectColor;
         e.target.dataset.state = "shown";
@@ -198,12 +194,13 @@ function renderLeaderboard() {
     var leaderListLeft = document.createElement("ol");
     var leaderListRight = document.createElement("ol");
 
-    for (var i = 0; i < highscores.length; i = i + 2) {
+    for (var i = 0; i < highscores.length; i++) {
         var itemName = document.createElement("li");
-        itemName.textContent = highscores[i[0]];
+        itemName.textContent = highscores[i][0];
 
         var itemScore = document.createElement("li");
-        itemScore.textContent = highscores[i[1]];
+        itemScore.textContent = highscores[i][1];
+        console.log(highscores[i][1]);
 
         leaderListLeft.appendChild(itemName);
         leaderListRight.appendChild(itemScore);
@@ -232,7 +229,6 @@ function loadLeaderboardScores() {
     if (localStorage.getItem("save") != null) {
         highscores = JSON.parse(localStorage.getItem("save"));
     }
-
     renderLeaderboard();
 }
 
