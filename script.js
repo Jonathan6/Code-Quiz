@@ -64,7 +64,7 @@ var questionSet = [
     }
 ];
 
-//  Array storing all previous highscores
+//  Sorted Array by score of all previous highscores
 var highscores = [];
 
 //  Buttons
@@ -97,7 +97,7 @@ endScreen.style.display = "block";
 //  Internal variables
 
 var questionIndex = 0;
-var secondsLeft = 30;
+var secondsLeft = 60;
 var timerInterval;
 
 //  Settings
@@ -147,27 +147,11 @@ answerBox.addEventListener("click", function(e) {
 //  Event:      Click submit score button
 //  Function:   Submit takes user input and adds score to local storage
 submit.addEventListener("click", function(e) {
-    //  record their score
-    //  add local storage highscore
-    //  asks user for name
-
-    // console.log(userInput.textContent.trim());
     if (userInput.value.trim() != "") {
-        highscores.push(userInput.value);
-        highscores.push(secondsLeft);
+        addScore([userInput.value.trim(), secondsLeft]);
         save();
         renderLeaderboard();
     }
-    //  TODO: sort the highscores
-    // if (highscores.length === 0) {
-    //     highscores.push(secondsLeft);
-    // } else {
-    //     for (var i = 0; i < highscores.length; i++) {
-    //         if (highscores[i] < secondsLeft) {
-                
-    //         }
-    //     }
-    // }
 });
 
 //  Event:      Click try again button
@@ -216,10 +200,10 @@ function renderLeaderboard() {
 
     for (var i = 0; i < highscores.length; i = i + 2) {
         var itemName = document.createElement("li");
-        itemName.textContent = highscores[i];
+        itemName.textContent = highscores[i[0]];
 
         var itemScore = document.createElement("li");
-        itemScore.textContent = highscores[i + 1];
+        itemScore.textContent = highscores[i[1]];
 
         leaderListLeft.appendChild(itemName);
         leaderListRight.appendChild(itemScore);
@@ -240,13 +224,8 @@ function endPoint() {
 }
 
 function save() {
-    var sortedHighscores = sortHighscores(0, highscores.length);
-
     localStorage.clear();
     localStorage.setItem("save", JSON.stringify(highscores));
-    // for (var i = 0; i < highscores.length; i = i + 2) {
-    //     localStorage.setItem(highscores[i], highscores[i + 1]);
-    // }
 }
 
 function loadLeaderboardScores() {
@@ -272,26 +251,26 @@ function resetSettings() {
 
 //  Sorting the left being the highest
 //  This will not work based on how I set up the array. Will need to find a different solution
-function sortedHighscores(index1, index2) {
-/*
-    base case: we are given 1 or 2, 1 length arrays to work worth
-    we shift them based on whichever is begger
-
-    any other case:
-    call this function 2 times splitting the given indexes in half
-    we first swap the bigger number into the big slot
-    move down to the next empty space and do the same until we are out of numbers
-    return the array
-
-    we give this function 2 sorted lists and it will return one single sorted list
-*/
-    if (index1 === index2 + 1) {
-        // only given 1 index therefore we just return the result
-    } else  {
-        var left = sortedHighscores(leftside);
-        var right = sortedHighscores(rigthside);
-
+    /*  
+        empty array
+        largest value in the array
+        inbetween cases
+    */
+function addScore(score) {
+    if (highscores.length <= 0) {
+        highscores.push(score);
+    } else if (score[1] >= highscores[0][1]) {
+        highscores.unshift(score);
+    } else {
+        var temp = score;
+        var temp2;
+        for (var i = 1; i < highscores.length; i++) {
+            if (temp[1] >= highscores[i][1]) {
+                temp2 = highscores[i];
+                highscores[i] = temp;
+                temp = temp2;
+            }
+        }
+        highscores.push(temp);
     }
-
-    
 }
