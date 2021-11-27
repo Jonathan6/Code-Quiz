@@ -1,3 +1,7 @@
+header {
+    
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -20,6 +24,12 @@ main div {
 #answerBox {
     display: flex;
     flex-direction: column;
+}
+
+#answerBox button {
+    line-height: 2rem;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.5rem;
 }
 
 #answerBox div {
