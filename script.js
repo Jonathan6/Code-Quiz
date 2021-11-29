@@ -56,12 +56,9 @@ var questionSet = [
 var highscores = [];
 
 //  Buttons
-var buttons = [ document.getElementById("answer1"),
-                document.getElementById("answer2"),
-                document.getElementById("answer3"),
-                document.getElementById("answer4")
-];
+var buttons = document.getElementsByClassName("btn-light");
 
+// Event Listener Variables
 var start = document.getElementById("start");
 var answerBox = document.getElementById("answerBox"); 
 var userInput = document.getElementById("userInput");
@@ -79,8 +76,8 @@ var testScreen = document.getElementById("testScreen");
 var endScreen = document.getElementById("endScreen");
 
 //  Settings
-var timeGiven = 60;
-var penalty = 3; // How many seconds will be deduted when geting a wrong answer
+var timeGiven = 60; //  Time given. Used in the code elsewhere
+var penalty = 3;    //  How many seconds will be deduted when geting a wrong answer
 var correctColor = "beige";
 var incorrectColor = "red";
 
@@ -94,12 +91,12 @@ var timerInterval;
 //  Function:   Hides start page, question and answer box appear
 start.addEventListener("click", function() {
     timerInterval = setInterval(function() {
-        secondsLeft--;
-        clock.textContent = (secondsLeft + " seconds left");
+        secondsLeft = secondsLeft - 0.1;
+        clock.textContent = (secondsLeft.toFixed(1) + " seconds left");
         if(secondsLeft <= 0) {
             endPoint();
         }
-    }, 1000);
+    }, 100);
     welcomeScreen.style.display = "none";
     testScreen.style.display = "initial";
     loadLeaderboardScores();
@@ -128,7 +125,7 @@ answerBox.addEventListener("click", function(e) {
 //  Function:   Submit takes user input and adds score to local storage
 submit.addEventListener("click", function(e) {
     if (userInput.value.trim() != "") {
-        addScore([userInput.value.trim(), secondsLeft]);
+        addScore([userInput.value.trim(), secondsLeft.toFixed(1)]);
         save();
         renderLeaderboard();
         submit.style.display = "none";
@@ -144,6 +141,7 @@ again.addEventListener("click", function(e) {
     welcomeScreen.style.display = "initial";
 });
 
+// The intersection for between questions and to change to the end screen once out of questions
 function startPoint() {
     //  Renders the first question onto the page
     console.log(questionSet[questionIndex]);
@@ -154,6 +152,7 @@ function startPoint() {
     }
 }
 
+// Handles rendering when a new question is pulled up from question text, button text, and button datasets
 function renderQuestion(questionIndex) {
     //  Sets the question
     question.textContent = questionSet[questionIndex].question;
@@ -173,10 +172,11 @@ function renderQuestion(questionIndex) {
     }
 }
 
+// Hides the testing screen and loads the end screen. Calls all functions necessary for the transition.
 function endPoint() {
     clearInterval(timerInterval);
     clock.textContent = "PUT DOWN YOUR MICE";
-    score.textContent = secondsLeft + " seconds!";
+    score.textContent = secondsLeft.toFixed(1) + " seconds!";
     loadLeaderboardScores();
     renderLeaderboard();
     //  TODO: breakdown of their score
@@ -184,6 +184,7 @@ function endPoint() {
     endScreen.style.display = "initial";
 }
 
+// Resets all the settings for a retest
 function resetSettings() {
     secondsLeft = timeGiven;
     questionIndex = 0;
@@ -197,14 +198,14 @@ function resetSettings() {
     }
 }
 
+// Pulls data from local storage if there is any
 function loadLeaderboardScores() {
     if (localStorage.getItem("save") != null) {
         highscores = JSON.parse(localStorage.getItem("save"));
     }
 }
 
-//  Sorting the left being the highest
-//  This will not work based on how I set up the array. Will need to find a different solution
+//  Adding new score to highscores array. Sorted by time remaining (score)
 function addScore(score) {
     if (highscores.length <= 0) {
         highscores.push(score);
@@ -224,11 +225,12 @@ function addScore(score) {
     }
 }
 
+// Save the current highscores array into local storage
 function save() {
-    localStorage.clear();
     localStorage.setItem("save", JSON.stringify(highscores));
 }
 
+// Renders the leaderboard with the highscores array
 function renderLeaderboard() {
     leaderboard.innerHTML = "";
     var leaderListLeft = document.createElement("ol");
